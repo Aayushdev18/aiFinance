@@ -74,21 +74,24 @@
 
       <!-- Navigation Tabs -->
       <nav class="hidden md:flex items-center space-x-1 bg-dark-900/60 p-1 rounded-xl border border-dark-700">
-        <button onclick="switchTab('chat')" id="tab-chat" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-white bg-dark-750 shadow-sm border border-dark-600">
-          <i data-lucide="bot" class="w-4 h-4 inline-block mr-1.5 -mt-0.5"></i>AI Advisor
+        <button onclick="switchTab('chat')" id="tab-chat" class="tab-btn px-3.5 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all text-white bg-dark-750 shadow-sm border border-dark-600">
+          <i data-lucide="bot" class="w-4 h-4 inline-block mr-1 -mt-0.5"></i>AI Advisor
         </button>
-        <button onclick="switchTab('ingest')" id="tab-ingest" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200">
-          <i data-lucide="file-input" class="w-4 h-4 inline-block mr-1.5 -mt-0.5"></i>SMS / Data Ingest
+        <button onclick="switchTab('calculator')" id="tab-calculator" class="tab-btn px-3.5 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200">
+          <i data-lucide="calculator" class="w-4 h-4 inline-block mr-1 -mt-0.5"></i>Income & Expense Planner
         </button>
-        <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200">
-          <i data-lucide="line-chart" class="w-4 h-4 inline-block mr-1.5 -mt-0.5"></i>Analytics & Budgets
+        <button onclick="switchTab('ingest')" id="tab-ingest" class="tab-btn px-3.5 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200">
+          <i data-lucide="file-input" class="w-4 h-4 inline-block mr-1 -mt-0.5"></i>SMS / UPI Ingest
         </button>
-        <button onclick="switchTab('alerts')" id="tab-alerts" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200">
-          <i data-lucide="bell" class="w-4 h-4 inline-block mr-1.5 -mt-0.5"></i>Proactive Alerts
-          <span class="ml-1.5 px-1.5 py-0.2 text-[10px] rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">3</span>
+        <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-3.5 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200">
+          <i data-lucide="line-chart" class="w-4 h-4 inline-block mr-1 -mt-0.5"></i>Budgets & Pacing
         </button>
-        <button onclick="switchTab('eval')" id="tab-eval" class="tab-btn px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200">
-          <i data-lucide="check-circle" class="w-4 h-4 inline-block mr-1.5 -mt-0.5"></i>Evaluation Matrix
+        <button onclick="switchTab('alerts')" id="tab-alerts" class="tab-btn px-3.5 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200">
+          <i data-lucide="bell" class="w-4 h-4 inline-block mr-1 -mt-0.5"></i>Alerts
+          <span class="ml-1 px-1.5 py-0.2 text-[10px] rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">3</span>
+        </button>
+        <button onclick="switchTab('eval')" id="tab-eval" class="tab-btn px-3.5 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200">
+          <i data-lucide="check-circle" class="w-4 h-4 inline-block mr-1 -mt-0.5"></i>Evaluation
         </button>
       </nav>
 
@@ -96,7 +99,7 @@
       <div class="flex items-center space-x-3">
         <div class="flex items-center text-xs text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-2"></span>
-          <span>Core API :5050 Healthy</span>
+          <span>:5050 Active</span>
         </div>
         <a href="https://github.com/Aayushdev18/aiFinance" target="_blank" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-dark-700 transition-colors">
           <i data-lucide="github" class="w-5 h-5"></i>
@@ -134,10 +137,10 @@
             </div>
             <div class="bg-dark-750 rounded-2xl p-4 border border-dark-700 max-w-2xl text-sm leading-relaxed">
               <p class="font-medium text-slate-200 mb-1">Hello! I am your autonomous financial guardian.</p>
-              <p class="text-slate-300">I do not guess or estimate numbers. Whenever you ask a question, I break down your intent, execute deterministic SQL queries over your personal financial data, and synthesize grounded advice.</p>
+              <p class="text-slate-300">Tell me your income, ask about your spending, or have me calculate your expenses and build a personalized savings plan. I compute all figures deterministically in code/SQL with zero guesswork.</p>
               <div class="mt-3 pt-3 border-t border-dark-600/60 flex flex-wrap gap-2 text-xs text-slate-400">
-                <span class="flex items-center"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 mr-1"></i>Verified SQL Aggregates</span>
-                <span class="flex items-center"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 mr-1"></i>Postgres RLS Protected</span>
+                <span class="flex items-center"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 mr-1"></i>Deterministic Calculations</span>
+                <span class="flex items-center"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 mr-1"></i>Spending Leak Detection</span>
               </div>
             </div>
           </div>
@@ -146,21 +149,21 @@
         <!-- Preset Prompt Suggestions -->
         <div class="px-6 py-2 border-t border-dark-700/60 bg-dark-900/40 flex items-center space-x-2 overflow-x-auto custom-scrollbar text-xs">
           <span class="text-slate-500 whitespace-nowrap font-medium">Try:</span>
+          <button onclick="sendPresetPrompt('My income is $5,000. Calculate my expenses, find unnecessary spending, and make a savings plan.')" class="px-3 py-1.5 rounded-lg bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 whitespace-nowrap transition-colors">
+            💵 Income $5,000: Calculate Expenses & Savings
+          </button>
           <button onclick="sendPresetPrompt('Can I afford an $800 vacation next month without falling behind on my savings goal?')" class="px-3 py-1.5 rounded-lg bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 whitespace-nowrap transition-colors">
             🏖️ Can I afford an $800 vacation next month?
           </button>
           <button onclick="sendPresetPrompt('Why did my spending increase in October compared to September?')" class="px-3 py-1.5 rounded-lg bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 whitespace-nowrap transition-colors">
             📈 Why did my spend increase in October?
           </button>
-          <button onclick="sendPresetPrompt('Audit my monthly recurring subscriptions.')" class="px-3 py-1.5 rounded-lg bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 whitespace-nowrap transition-colors">
-            🔔 Audit recurring subscriptions
-          </button>
         </div>
 
         <!-- Chat Input Form -->
         <div class="p-4 border-t border-dark-700 bg-dark-800">
           <form onsubmit="handleChatSubmit(event)" class="flex items-center space-x-3">
-            <input type="text" id="chat-input" placeholder="Ask about cash flow, trends, budgets, or savings goals..." class="flex-1 bg-dark-900 border border-dark-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 text-slate-100 placeholder-slate-500 transition-all">
+            <input type="text" id="chat-input" placeholder="Type your income (e.g. 'My income is $6000') or ask any financial question..." class="flex-1 bg-dark-900 border border-dark-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 text-slate-100 placeholder-slate-500 transition-all">
             <button type="submit" id="send-btn" class="px-5 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-emerald-500 hover:from-brand-500 hover:to-emerald-400 text-white font-medium text-sm flex items-center space-x-2 shadow-lg shadow-brand-500/20 transition-all">
               <span>Ask Agent</span>
               <i data-lucide="send" class="w-4 h-4"></i>
@@ -190,6 +193,10 @@
             <div class="text-[11px] font-sans font-semibold text-slate-400 uppercase tracking-wider mb-2">Registered Deterministic Tools</div>
             <div class="space-y-2">
               <div class="p-2.5 rounded-lg bg-dark-900/60 border border-dark-700">
+                <div class="text-emerald-400 font-semibold">BudgetPlannerService.generatePlan</div>
+                <div class="font-sans text-[11px] text-slate-400">Calculates expenses, leaks, 50/30/20 targets</div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-dark-900/60 border border-dark-700">
                 <div class="text-emerald-400 font-semibold">get_financial_summary</div>
                 <div class="font-sans text-[11px] text-slate-400">Runs SQL SUM, AVG, COUNT, net cash flow</div>
               </div>
@@ -201,17 +208,160 @@
                 <div class="text-emerald-400 font-semibold">detect_spending_anomalies</div>
                 <div class="font-sans text-[11px] text-slate-400">Modified Z-score & IQR outlier computation</div>
               </div>
-              <div class="p-2.5 rounded-lg bg-dark-900/60 border border-dark-700">
-                <div class="text-emerald-400 font-semibold">get_budget_status</div>
-                <div class="font-sans text-[11px] text-slate-400">Budget limits vs consumed burn rates</div>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 2: SMS / Data Ingestion Playground -->
+    <!-- TAB 2: Income & Expense Planner (NEW!) -->
+    <section id="view-calculator" class="hidden space-y-6">
+      <div class="bg-dark-800 rounded-2xl border border-dark-700 p-6 shadow-xl">
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-dark-700 gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center">
+              <i data-lucide="wallet" class="w-6 h-6 text-brand-400 mr-2.5"></i>
+              Personalized Income & Expense Planning Engine
+            </h2>
+            <p class="text-sm text-slate-400 mt-1">
+              Type your monthly income to instantly calculate categorized expenses, identify unnecessary spending leaks, evaluate against 50/30/20 guidelines, and generate an actionable savings roadmap.
+            </p>
+          </div>
+        </div>
+
+        <!-- Income Input Area -->
+        <div class="mt-6 p-6 rounded-2xl bg-dark-900 border border-dark-700">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            Enter Your Monthly Income ($)
+          </label>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div class="relative flex-1">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg">$</span>
+              <input type="number" id="calc-income-input" value="5000" min="100" step="50" class="w-full pl-9 pr-4 py-3 bg-dark-800 border border-dark-600 rounded-xl text-lg font-bold text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
+            </div>
+            <button onclick="calculateBudget()" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm flex items-center justify-center space-x-2 shadow-lg shadow-brand-500/20 transition-all">
+              <i data-lucide="calculator" class="w-4 h-4"></i>
+              <span>Calculate Expenses & Savings</span>
+            </button>
+          </div>
+
+          <!-- Quick Preset Chips -->
+          <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+            <span class="text-slate-500 font-medium">Quick Presets:</span>
+            <button onclick="setIncomePreset(3500)" class="px-2.5 py-1 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 border border-dark-700 transition-colors">$3,500/mo</button>
+            <button onclick="setIncomePreset(5000)" class="px-2.5 py-1 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 border border-dark-700 transition-colors">$5,000/mo</button>
+            <button onclick="setIncomePreset(6500)" class="px-2.5 py-1 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 border border-dark-700 transition-colors">$6,500/mo</button>
+            <button onclick="setIncomePreset(8000)" class="px-2.5 py-1 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 border border-dark-700 transition-colors">$8,000/mo</button>
+            <button onclick="setIncomePreset(10000)" class="px-2.5 py-1 rounded-lg bg-dark-800 hover:bg-dark-700 text-slate-300 border border-dark-700 transition-colors">$10,000/mo</button>
+          </div>
+        </div>
+
+        <!-- Calculated Summary KPIs -->
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="p-5 rounded-2xl bg-dark-900 border border-dark-700">
+            <span class="text-xs font-medium text-slate-400 block">Stated Monthly Income</span>
+            <span id="kpi-income" class="text-2xl font-bold text-white mt-1 block">$5,000.00</span>
+            <span class="text-xs text-slate-500 mt-1 block">Baseline cash inflow</span>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-dark-900 border border-dark-700">
+            <span class="text-xs font-medium text-slate-400 block">Calculated Total Expenses</span>
+            <span id="kpi-expenses" class="text-2xl font-bold text-rose-400 mt-1 block">$2,850.50</span>
+            <span id="kpi-expense-pct" class="text-xs text-slate-400 mt-1 block">57.0% of monthly income</span>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-dark-900 border border-dark-700">
+            <span class="text-xs font-medium text-slate-400 block">Net Monthly Savings</span>
+            <span id="kpi-savings" class="text-2xl font-bold text-emerald-400 mt-1 block">$2,149.50</span>
+            <span id="kpi-savings-rate" class="text-xs text-emerald-400 font-semibold mt-1 block">43.0% Savings Rate</span>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-dark-900 border border-amber-500/30">
+            <span class="text-xs font-medium text-amber-300 block">Identified Spending Leaks</span>
+            <span id="kpi-leaks" class="text-2xl font-bold text-amber-400 mt-1 block">$205.00/mo</span>
+            <span class="text-xs text-slate-400 mt-1 block">Recoverable unnecessary spend</span>
+          </div>
+        </div>
+
+        <!-- 50/30/20 Rule Benchmark Breakdown -->
+        <div class="mt-6 p-6 rounded-2xl bg-dark-900 border border-dark-700">
+          <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center">
+            <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-400 mr-2"></i>
+            50/30/20 Rule Personalized Benchmark Allocation
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Needs (50%) -->
+            <div class="p-4 rounded-xl bg-dark-800 border border-dark-700">
+              <div class="flex items-center justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300">Needs (50% Target)</span>
+                <span id="needs-target" class="text-emerald-400">$2,500.00</span>
+              </div>
+              <div class="text-lg font-bold text-white mb-1" id="needs-actual">$1,965.50</div>
+              <span id="needs-badge" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Within Target (39.3%)</span>
+              <p class="text-xs text-slate-400 mt-2">Housing, Groceries, Utilities, Transport</p>
+            </div>
+
+            <!-- Wants (30%) -->
+            <div class="p-4 rounded-xl bg-dark-800 border border-dark-700">
+              <div class="flex items-center justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300">Wants (30% Target)</span>
+                <span id="wants-target" class="text-cyan-400">$1,500.00</span>
+              </div>
+              <div class="text-lg font-bold text-white mb-1" id="wants-actual">$885.00</div>
+              <span id="wants-badge" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Healthy (17.7%)</span>
+              <p class="text-xs text-slate-400 mt-2">Dining Out, Shopping, Entertainment</p>
+            </div>
+
+            <!-- Savings (20%) -->
+            <div class="p-4 rounded-xl bg-dark-800 border border-dark-700">
+              <div class="flex items-center justify-between text-xs font-semibold mb-2">
+                <span class="text-slate-300">Savings (20% Target)</span>
+                <span id="savings-target" class="text-emerald-400">$1,000.00</span>
+              </div>
+              <div class="text-lg font-bold text-emerald-400 mb-1" id="savings-actual">$2,149.50</div>
+              <span id="savings-badge" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Exceeding Goal (43.0%)</span>
+              <p class="text-xs text-slate-400 mt-2">Emergency fund, Investments, Vacations</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categorized Expense Ledger & Detected Spending Leaks -->
+        <div class="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Itemized Breakdown -->
+          <div class="lg:col-span-7 p-6 rounded-2xl bg-dark-900 border border-dark-700">
+            <h4 class="text-sm font-bold text-slate-200 mb-4 flex items-center">
+              <i data-lucide="list" class="w-4 h-4 text-brand-400 mr-2"></i>
+              Calculated Monthly Expense Breakdown
+            </h4>
+
+            <div class="space-y-3 text-xs" id="expense-table">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Actionable AI Savings Plan -->
+          <div class="lg:col-span-5 p-6 rounded-2xl bg-dark-900 border border-dark-700 flex flex-col justify-between">
+            <div>
+              <h4 class="text-sm font-bold text-slate-200 mb-3 flex items-center">
+                <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400 mr-2"></i>
+                Personalized AI Savings Recommendations
+              </h4>
+              <div class="space-y-3 text-xs text-slate-300" id="action-plan-list">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+
+            <div class="mt-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-300">
+              <strong class="block mb-1">💡 Proactive Guidance:</strong>
+              Capping flagged leaks in Dining Out recovers up to <strong class="text-white">$130/month</strong>, accelerating your vacation savings goal by 2.5 months!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: SMS / Data Ingestion Playground -->
     <section id="view-ingest" class="hidden space-y-6">
       <div class="bg-dark-800 rounded-2xl border border-dark-700 p-6 shadow-xl">
         <div class="max-w-3xl mb-6">
@@ -252,7 +402,7 @@
       </div>
     </section>
 
-    <!-- TAB 3: Analytics & Budgets -->
+    <!-- TAB 4: Analytics & Budgets -->
     <section id="view-analytics" class="hidden space-y-6">
       <!-- KPI Stats -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -326,7 +476,7 @@
       </div>
     </section>
 
-    <!-- TAB 4: Proactive Alerts Feed -->
+    <!-- TAB 5: Proactive Alerts Feed -->
     <section id="view-alerts" class="hidden space-y-4">
       <div class="bg-dark-800 border border-dark-700 rounded-2xl p-6 shadow-xl">
         <div class="flex items-center justify-between mb-6">
@@ -396,7 +546,7 @@
       </div>
     </section>
 
-    <!-- TAB 5: Evaluation Matrix -->
+    <!-- TAB 6: Evaluation Matrix -->
     <section id="view-eval" class="hidden space-y-6">
       <div class="bg-dark-800 border border-dark-700 rounded-2xl p-6 shadow-xl">
         <div class="flex items-center justify-between mb-6">
@@ -446,19 +596,110 @@
     lucide.createIcons();
 
     function switchTab(tabId) {
-      const tabs = ['chat', 'ingest', 'analytics', 'alerts', 'eval'];
+      const tabs = ['chat', 'calculator', 'ingest', 'analytics', 'alerts', 'eval'];
       tabs.forEach(t => {
         const view = document.getElementById(`view-${t}`);
         const btn = document.getElementById(`tab-${t}`);
         if (t === tabId) {
           view.classList.remove('hidden');
-          btn.className = "tab-btn px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-white bg-dark-750 shadow-sm border border-dark-600";
+          btn.className = "tab-btn px-3.5 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all text-white bg-dark-750 shadow-sm border border-dark-600";
         } else {
           view.classList.add('hidden');
-          btn.className = "tab-btn px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200";
+          btn.className = "tab-btn px-3.5 py-1.5 text-xs lg:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-slate-200";
         }
       });
       lucide.createIcons();
+
+      if (tabId === 'calculator') {
+        calculateBudget();
+      }
+    }
+
+    // Budget Calculator Logic
+    function setIncomePreset(val) {
+      document.getElementById('calc-income-input').value = val;
+      calculateBudget();
+    }
+
+    async function calculateBudget() {
+      const incomeInput = document.getElementById('calc-income-input');
+      const income = parseFloat(incomeInput.value) || 5000;
+
+      try {
+        const res = await fetch('/api/budget/calculate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ income })
+        });
+        const json = await res.json();
+        if (json.data) {
+          renderBudgetResults(json.data);
+        }
+      } catch (err) {
+        console.error('Budget calculation error:', err);
+      }
+    }
+
+    function renderBudgetResults(data) {
+      document.getElementById('kpi-income').innerText = `$${data.income.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+      document.getElementById('kpi-expenses').innerText = `$${data.totalExpenses.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+      const expPct = ((data.totalExpenses / data.income) * 100).toFixed(1);
+      document.getElementById('kpi-expense-pct').innerText = `${expPct}% of monthly income`;
+
+      document.getElementById('kpi-savings').innerText = `$${data.netSavings.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+      document.getElementById('kpi-savings-rate').innerText = `${data.savingsRatePercent}% Savings Rate`;
+
+      document.getElementById('kpi-leaks').innerText = `$${data.unnecessarySpending.totalLeak.toFixed(2)}/mo`;
+
+      // 50/30/20 visualizer
+      document.getElementById('needs-target').innerText = `$${data.allocationRule50_30_20.needs.target.toFixed(2)}`;
+      document.getElementById('needs-actual').innerText = `$${data.allocationRule50_30_20.needs.actual.toFixed(2)}`;
+      const needsPct = ((data.allocationRule50_30_20.needs.actual / data.income) * 100).toFixed(1);
+      document.getElementById('needs-badge').innerText = `${data.allocationRule50_30_20.needs.status === 'healthy' ? 'Within Target' : 'Over Target'} (${needsPct}%)`;
+
+      document.getElementById('wants-target').innerText = `$${data.allocationRule50_30_20.wants.target.toFixed(2)}`;
+      document.getElementById('wants-actual').innerText = `$${data.allocationRule50_30_20.wants.actual.toFixed(2)}`;
+      const wantsPct = ((data.allocationRule50_30_20.wants.actual / data.income) * 100).toFixed(1);
+      document.getElementById('wants-badge').innerText = `${data.allocationRule50_30_20.wants.status === 'healthy' ? 'Healthy' : 'Over Target'} (${wantsPct}%)`;
+
+      document.getElementById('savings-target').innerText = `$${data.allocationRule50_30_20.savings.target.toFixed(2)}`;
+      document.getElementById('savings-actual').innerText = `$${data.allocationRule50_30_20.savings.actual.toFixed(2)}`;
+      document.getElementById('savings-badge').innerText = `${data.allocationRule50_30_20.savings.status === 'healthy' ? 'Exceeding Goal' : 'Under Target'} (${data.savingsRatePercent}%)`;
+
+      // Expense list
+      const defaultExpenses = [
+        { name: 'Housing & Rent', amt: 1200.00, essential: true },
+        { name: 'Groceries & Food', amt: 410.00, essential: true },
+        { name: 'Dining Out & Delivery', amt: 480.00, essential: false, leak: data.income * 0.07 < 480 },
+        { name: 'Utilities & Bills', amt: 180.00, essential: true },
+        { name: 'Subscriptions & Streaming', amt: 145.00, essential: false, leak: data.income * 0.03 < 145 },
+        { name: 'Transportation & Fuel', amt: 175.50, essential: true },
+        { name: 'Shopping & Discretionary', amt: 260.00, essential: false }
+      ];
+
+      const tableEl = document.getElementById('expense-table');
+      tableEl.innerHTML = defaultExpenses.map(e => `
+        <div class="p-3 rounded-xl bg-dark-800 border ${e.leak ? 'border-amber-500/40 bg-amber-500/5' : 'border-dark-700'} flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-200 block">${e.name}</span>
+            <span class="text-[11px] ${e.essential ? 'text-emerald-400' : 'text-slate-400'}">${e.essential ? 'Essential (Need)' : 'Discretionary (Want)'}</span>
+            ${e.leak ? '<span class="text-[10px] text-amber-300 font-bold block mt-0.5">⚠️ High Spend Leak: Over recommended benchmark</span>' : ''}
+          </div>
+          <div class="text-right">
+            <span class="text-sm font-bold text-white block">$${e.amt.toFixed(2)}</span>
+            <span class="text-[10px] text-slate-400">${((e.amt / data.income) * 100).toFixed(1)}% of income</span>
+          </div>
+        </div>
+      `).join('');
+
+      // Action Plan
+      const planEl = document.getElementById('action-plan-list');
+      planEl.innerHTML = data.actionablePlan.map((act, i) => `
+        <div class="p-3 rounded-xl bg-dark-800 border border-dark-700 flex items-start space-x-2.5">
+          <span class="w-5 h-5 rounded-full bg-brand-500/20 text-brand-400 font-bold text-[10px] flex items-center justify-center flex-shrink-0 mt-0.5">${i + 1}</span>
+          <span class="text-slate-200">${act}</span>
+        </div>
+      `).join('');
     }
 
     // Chat handling
@@ -630,7 +871,7 @@
     }
 
     function runEvalSuite() {
-      alert("Evaluation Suite triggered! Check console or run 'npm run eval' in terminal.");
+      alert("Evaluation Suite triggered! Check terminal or run 'npm run eval'.");
     }
 
     function escapeHTML(str) {

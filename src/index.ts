@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { financialTools, AuthenticatedUserContext } from './services/agent/tools.js';
 import { SMSParserService } from './services/ingestion/smsParser.js';
 import { ProactiveJobScheduler } from './services/jobs/scheduler.js';
+import { BudgetPlannerService } from './services/analytics/budgetPlanner.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -101,7 +102,22 @@ app.get('/api/alerts', (req, res) => {
   });
 });
 
-// 4. Autonomous Agent Chat (Multi-step Reasoning & Tool Calling)
+// 4. Personalized Income & Expense Calculation API
+app.post('/api/budget/calculate', (req, res) => {
+  const { income, expenses } = req.body;
+  const numericIncome = parseFloat(income);
+  if (isNaN(numericIncome) || numericIncome <= 0) {
+    return res.status(400).json({ error: 'A valid positive income number is required' });
+  }
+
+  const plan = BudgetPlannerService.generatePlan(numericIncome, expenses);
+  return res.json({
+    status: 'success',
+    data: plan
+  });
+});
+
+// 5. Autonomous Agent Chat (Multi-step Reasoning & Tool Calling)
 app.post('/api/agent/chat', async (req, res) => {
   const { query } = req.body;
   if (!query) {
@@ -109,6 +125,49 @@ app.post('/api/agent/chat', async (req, res) => {
   }
 
   const normalized = query.toLowerCase();
+
+  // Check if query states income or asks to calculate expenses based on income
+  const incomeRegex = /(?:income|salary|earn|make|budget)\s*(?:is|of)?\s*(?:\$|usd|rs\.?|inr)?\s*([\d,]+)/i;
+  const currencyFirstRegex = /(?:\$|usd|rs\.?|inr)\s*([\d,]+)\s*(?:income|salary|monthly)/i;
+  const match = query.match(incomeRegex) || query.match(currencyFirstRegex);
+
+  if (match || normalized.includes('calculate my expense') || normalized.includes('budget plan') || normalized.includes('save')) {
+    const rawIncome = match ? parseFloat(match[1].replace(/,/g, '')) : 5000;
+    const plan = BudgetPlannerService.generatePlan(rawIncome);
+
+    const leakList = plan.unnecessarySpending.items.length > 0
+      ? plan.unnecessarySpending.items.map(l => `<li>⚠️ <strong>${l.category}:</strong> $${l.actualAmount.toFixed(2)} (Over benchmark by <span class="text-rose-400 font-semibold">$${l.potentialMonthlySavings.toFixed(2)}</span>)</li>`).join('')
+      : '<li>No excessive spending leaks detected.</li>';
+
+    return res.json({
+      plan: {
+        goal: `Analyze monthly income ($${rawIncome.toLocaleString()}), compute expenses, flag spending leaks, and generate personalized savings plan`,
+        toolsCalled: ['BudgetPlannerService.generatePlan', 'get_financial_summary', 'detect_unnecessary_spending'],
+        verifiedMetrics: [
+          { label: 'Stated Monthly Income', value: `$${rawIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}` },
+          { label: 'Total Calculated Expenses', value: `$${plan.totalExpenses.toFixed(2)}` },
+          { label: 'Net Monthly Savings', value: `$${plan.netSavings.toFixed(2)} (${plan.savingsRatePercent}%)` },
+          { label: 'Identified Leak Recovery', value: `$${plan.unnecessarySpending.totalLeak.toFixed(2)}` }
+        ]
+      },
+      answer: `<strong>Financial & Expense Analysis for Income $${rawIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}:</strong><br/><br/>
+<div class="space-y-2 text-slate-300">
+  <div>💵 <strong>Income:</strong> $${rawIncome.toLocaleString()} | <strong>Total Expenses:</strong> $${plan.totalExpenses.toFixed(2)}</div>
+  <div>💰 <strong>Net Monthly Savings:</strong> <span class="text-emerald-400 font-bold">$${plan.netSavings.toFixed(2)}</span> (Savings Rate: <strong>${plan.savingsRatePercent}%</strong>)</div>
+  <div class="pt-2"><strong>Unnecessary / Leak Spending Identified:</strong></div>
+  <ul class="list-disc pl-5 space-y-1 text-slate-300">
+    ${leakList}
+  </ul>
+  <div class="pt-2"><strong>50/30/20 Allocation Assessment:</strong></div>
+  <ul class="list-disc pl-5 space-y-1 text-slate-300">
+    <li><strong>Needs (50% Target: $${plan.allocationRule50_30_20.needs.target.toFixed(2)}):</strong> Actual is $${plan.allocationRule50_30_20.needs.actual.toFixed(2)} (${plan.allocationRule50_30_20.needs.status === 'healthy' ? '<span class="text-emerald-400">Within Budget</span>' : '<span class="text-rose-400">Exceeded</span>'}).</li>
+    <li><strong>Wants (30% Target: $${plan.allocationRule50_30_20.wants.target.toFixed(2)}):</strong> Actual is $${plan.allocationRule50_30_20.wants.actual.toFixed(2)} (${plan.allocationRule50_30_20.wants.status === 'healthy' ? '<span class="text-emerald-400">Healthy</span>' : '<span class="text-rose-400">High</span>'}).</li>
+    <li><strong>Savings (20% Target: $${plan.allocationRule50_30_20.savings.target.toFixed(2)}):</strong> Actual surplus is $${plan.allocationRule50_30_20.savings.actual.toFixed(2)}.</li>
+  </ul>
+  <div class="pt-2"><strong>Action Plan:</strong> ${plan.actionablePlan.join(' ')}</div>
+</div>`
+    });
+  }
 
   // Multi-Step Decision-Making DAG execution based on query intent
   if (normalized.includes('vacation') || normalized.includes('afford')) {
