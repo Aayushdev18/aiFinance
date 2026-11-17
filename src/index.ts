@@ -8,6 +8,7 @@ import { financialTools, AuthenticatedUserContext } from './services/agent/tools
 import { SMSParserService } from './services/ingestion/smsParser.js';
 import { ProactiveJobScheduler } from './services/jobs/scheduler.js';
 import { BudgetPlannerService } from './services/analytics/budgetPlanner.js';
+import authRoutes from './modules/auth/auth.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,9 @@ app.use(express.json());
 
 // Serve static frontend dashboard
 app.use(express.static(path.join(__dirname, '../public')));
+
+// Mount API v1 Authentication routes
+app.use('/api/v1/auth', authRoutes);
 
 // Simulated verified authenticated session context (injected by JWT middleware in production)
 const demoAuthContext: AuthenticatedUserContext = {

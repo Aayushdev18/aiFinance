@@ -1,0 +1,260 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 1. Users & Tenant Profiles
+model User {
+  id            String         @id @default(uuid()) @db.Uuid
+  email         String         @unique @db.VarChar(255)
+  passwordHash  String         @map("password_hash") @db.VarChar(255)
+  status        String         @default("active") @db.VarChar(50)
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+
+  profile       UserProfile?
+  accounts      Account[]
+  categories    Category[]
+  transactions  Transaction[]
+  importBatches ImportBatch[]
+  budgets       Budget[]
+  goals         FinancialGoal[]
+  alerts        Alert[]
+  conversations Conversation[]
+  preferences   UserPreference?
+
+  @@map("users")
+}
+
+model UserProfile {
+  id                   String   @id @default(uuid()) @db.Uuid
+  userId               String   @unique @map("user_id") @db.Uuid
+  countryCode          String   @map("country_code") @db.VarChar(2)
+  primaryCurrency      String   @map("primary_currency") @db.VarChar(3)
+  timezone             String   @default("UTC") @db.VarChar(100)
+  baseSalary           Decimal  @default(0.00) @map("base_salary") @db.Decimal(14, 2)
+  salaryFrequency      String   @default("monthly") @map("salary_frequency") @db.VarChar(20)
+  emergencyFundTarget  Decimal  @default(0.00) @map("emergency_fund_target") @db.Decimal(14, 2)
+  localizedPreferences Json     @default("{\"date_format\": \"YYYY-MM-DD\", \"number_format\": \"en-US\"}") @map("localized_preferences")
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
+}
+
+// 2. Accounts & Financial Categories
+model Account {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  name        String   @db.VarChar(100)
+  accountType String   @map("account_type") @db.VarChar(50)
+  currency    String   @db.VarChar(3)
+  balance     Decimal  @default(0.00) @db.Decimal(14, 2)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@map("accounts")
+}
+
+model Category {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String?  @map("user_id") @db.Uuid
+  name             String   @db.VarChar(100)
+  slug             String   @db.VarChar(100)
+  type             String   @db.VarChar(20)
+  isSystem         Boolean  @default(false) @map("is_system")
+  benchmarkPercent Decimal  @default(0.00) @map("benchmark_percent") @db.Decimal(5, 2)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@map("categories")
+}
+
+// 3. Import Batches & Master Ledger Transactions
+model ImportBatch {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  fileName         String   @map("file_name") @db.VarChar(255)
+  fileFormat       String   @map("file_format") @db.VarChar(20)
+  totalRecords     Int      @default(0) @map("total_records")
+  importedRecords  Int      @default(0) @map("imported_records")
+  duplicateRecords Int      @default(0) @map("duplicate_records")
+  status           String   @default("pending_review") @db.VarChar(50)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@map("import_batches")
+}
+
+model Transaction {
+  id                 String   @id @default(uuid()) @db.Uuid
+  userId             String   @map("user_id") @db.Uuid
+  accountId          String?  @map("account_id") @db.Uuid
+  categoryId         String?  @map("category_id") @db.Uuid
+  importBatchId      String?  @map("import_batch_id") @db.Uuid
+  amount             Decimal  @db.Decimal(14, 2)
+  currency           String   @db.VarChar(3)
+  baseCurrencyAmount Decimal  @map("base_currency_amount") @db.Decimal(14, 2)
+  type               String   @db.VarChar(10)
+  rawDescription     String   @map("raw_description") @db.Text
+  normalizedMerchant String?  @map("normalized_merchant") @db.VarChar(255)
+  transactionDate    DateTime @map("transaction_date") @db.Timestamptz
+  source             String   @db.VarChar(20)
+  status             String   @default("cleared") @db.VarChar(20)
+  fingerprint        String   @db.Char(64)
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account     Account?     @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  category    Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  importBatch ImportBatch? @relation(fields: [importBatchId], references: [id], onDelete: SetNull)
+
+  @@index([userId, transactionDate(sort: Desc)])
+  @@index([userId, categoryId])
+  @@unique([userId, fingerprint])
+  @@map("transactions")
+}
+
+// 4. Budgets & Financial Goals
+model Budget {
+  id                    String   @id @default(uuid()) @db.Uuid
+  userId                String   @map("user_id") @db.Uuid
+  categoryId            String   @map("category_id") @db.Uuid
+  periodMonth           Int      @map("period_month") @db.SmallInt
+  periodYear            Int      @map("period_year") @db.SmallInt
+  limitAmount           Decimal  @map("limit_amount") @db.Decimal(14, 2)
+  alertThresholdPercent Decimal  @default(85.00) @map("alert_threshold_percent") @db.Decimal(5, 2)
+  createdAt             DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, categoryId, periodMonth, periodYear])
+  @@map("budgets")
+}
+
+model FinancialGoal {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  title         String   @db.VarChar(255)
+  targetAmount  Decimal  @map("target_amount") @db.Decimal(14, 2)
+  currentAmount Decimal  @default(0.00) @map("current_amount") @db.Decimal(14, 2)
+  targetDate    DateTime @map("target_date") @db.Date
+  status        String   @default("in_progress") @db.VarChar(20)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("financial_goals")
+}
+
+// 5. Auditable AI Agent Logs & Persistent Memory
+model Conversation {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  title     String   @default("Financial Inquiry") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  agentRuns AgentRun[]
+
+  @@map("conversations")
+}
+
+model Message {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @map("conversation_id") @db.Uuid
+  senderRole     String   @map("sender_role") @db.VarChar(20)
+  content        String   @db.Text
+  metadata       Json     @default("{}")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model AgentRun {
+  id              String   @id @default(uuid()) @db.Uuid
+  conversationId  String   @map("conversation_id") @db.Uuid
+  intentSummary   String?  @map("intent_summary") @db.Text
+  executionStatus String   @default("running") @map("execution_status") @db.VarChar(50)
+  latencyMs       Int?     @map("latency_ms")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  toolCalls    ToolCall[]
+
+  @@map("agent_runs")
+}
+
+model ToolCall {
+  id               String   @id @default(uuid()) @db.Uuid
+  agentRunId       String   @map("agent_run_id") @db.Uuid
+  toolName         String   @map("tool_name") @db.VarChar(100)
+  inputParameters  Json     @map("input_parameters")
+  outputResult     Json     @map("output_result")
+  executionSuccess Boolean  @default(true) @map("execution_success")
+  errorMessage     String?  @map("error_message") @db.Text
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  agentRun AgentRun @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
+
+  @@map("tool_calls")
+}
+
+model UserPreference {
+  id                           String   @id @default(uuid()) @db.Uuid
+  userId                       String   @unique @map("user_id") @db.Uuid
+  approvedPlanningConstraints  Json     @default("{\"max_dining_pct\": 0.10, \"min_savings_pct\": 0.20}") @map("approved_planning_constraints")
+  notificationSettings         Json     @default("{\"daily_anomaly_alerts\": true, \"pacing_warnings\": true, \"weekly_digest\": true}") @map("notification_settings")
+  createdAt                    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+// 6. Global Exchange Rates & Proactive Alerts
+model ExchangeRate {
+  baseCurrency   String   @map("base_currency") @db.VarChar(3)
+  targetCurrency String   @map("target_currency") @db.VarChar(3)
+  rateDate       DateTime @map("rate_date") @db.Date
+  exchangeRate   Decimal  @map("exchange_rate") @db.Decimal(16, 6)
+
+  @@id([baseCurrency, targetCurrency, rateDate])
+  @@map("exchange_rates")
+}
+
+model Alert {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  alertType String   @map("alert_type") @db.VarChar(50)
+  severity  String   @db.VarChar(20)
+  title     String   @db.VarChar(255)
+  message   String   @db.Text
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("alerts")
+}
