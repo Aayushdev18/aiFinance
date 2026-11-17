@@ -1,6 +1,6 @@
-import { SMSParserService } from '../services/ingestion/smsParser.ts';
-import { AnomalyDetectionService } from '../services/analytics/anomalyDetector.ts';
-import type { SpendingRecord } from '../services/analytics/anomalyDetector.ts';
+import { SMSParserService } from '../services/ingestion/smsParser.js';
+import { AnomalyDetectionService } from '../services/analytics/anomalyDetector.js';
+import type { SpendingRecord } from '../services/analytics/anomalyDetector.js';
 
 interface GroundTruthCategorizationCase {
   raw: string;
